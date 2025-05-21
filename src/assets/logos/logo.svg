@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" fill="none">
+  <!-- Background Circle -->
+  <circle cx="100" cy="100" r="90" fill="#2B6CB0" opacity="0.1" />
+  <circle cx="100" cy="100" r="85" stroke="#2B6CB0" stroke-width="6" />
+  
+  <!-- Medical Cross -->
+  <path d="M130 70H100C97.8 70 96 71.8 96 74V94H76C73.8 94 72 95.8 72 98V118C72 120.2 73.8 122 76 122H96V126C96 128.2 97.8 130 100 130H130C132.2 130 134 128.2 134 126V74C134 71.8 132.2 70 130 70Z" fill="#2B6CB0"/>
+  
+  <!-- Stylized S -->
+  <path d="M55 70C55 70 45 75 45 90C45 105 60 105 60 105C60 105 70 105 70 115C70 125 65 130 55 130M55 70C55 70 65 70 70 80" stroke="#48BB78" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" />
+  
+  <!-- Text -->
+  <text x="100" y="165" font-family="Arial, sans-serif" font-size="12" fill="#2D3748" text-anchor="middle" font-weight="bold">SC CLÍNICA</text>
+  <text x="100" y="180" font-family="Arial, sans-serif" font-size="10" fill="#4A5568" text-anchor="middle">FISIOTERAPIA</text>
+</svg>
