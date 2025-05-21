@@ -8,8 +8,7 @@ app.get('/', (req, res) => {
 });
 
 // Servir arquivos estáticos dos diretórios
-app.use('/src', express.static(path.join(__dirname, 'src')));
-app.use('/assets', express.static(path.join(__dirname, 'src/assets')));
+app.use(express.static(__dirname));
 
 // Porta do servidor
 const PORT = process.env.PORT || 5000;
