@@ -153,7 +153,7 @@
   </style>
 </head>
 <body>
-  <div id="app">
+  <div id="app" class="overflow-x-hidden">
     <!-- Navbar -->
     <nav class="fixed top-0 left-0 z-50 w-full bg-white shadow-md">
       <div class="container flex items-center justify-between px-4 py-4 mx-auto">
@@ -225,7 +225,7 @@
           class="object-cover w-full h-full"
           poster="https://images.unsplash.com/photo-1576091160399-112ba8d25d1f?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80"
         >
-          <source src="https://player.vimeo.com/external/371433846.sd.mp4?s=236da2f3c0fd273d2c6d9a064f3ae35579b2bbdf&profile_id=139&oauth2_token_id=57447761" type="video/mp4">
+          <source src="/src/assets/home.mp4" type="video/mp4">
           <!-- Fallback image -->
           <img src="https://images.unsplash.com/photo-1576091160399-112ba8d25d1f?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80" alt="SC Clínica" class="object-cover w-full h-full">
         </video>
@@ -315,9 +315,12 @@
               <div class="group bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-500 transform hover:scale-105 overflow-hidden">
                 <!-- Service Icon -->
                 <div class="relative p-8 text-center bg-gradient-to-br from-primary-1 to-primary-2">
-                  <div class="inline-flex items-center justify-center w-20 h-20 mx-auto mb-4 bg-white rounded-full shadow-lg group-hover:animate-float">
-                    <div v-html="servico.icon" class="w-10 h-10 text-primary-1"></div>
-                  </div>
+                  <img
+                    class="mb-4 sm:mb-6 group-hover:scale-110 transition-transform duration-300 rounded-lg
+                           w-[70vw] max-w-[100vw] sm:w-32 sm:h-32 sm:max-w-[100%] sm:max-h-[100%] md:w-full md:h-full object-contain"
+                    :src="servico.img"
+                    alt=""
+                  />
                   <h3 class="text-xl font-bold text-white">{{ servico.nome }}</h3>
                 </div>
                 
@@ -478,44 +481,26 @@
     </section>
 
     <!-- Sobre Nós -->
-    <section id="about" class="section-padding bg-gradient-to-br from-secondary/20 to-primary-2/10">
-      <div class="container">
-        <div class="flex flex-col items-center md:flex-row">
-          <div class="w-full mb-12 md:w-1/2 md:mb-0" data-aos="fade-right">
-            <div class="relative">
-              <img 
-                src="https://pixabay.com/get/g5b63352d01fc24edbe24423622d94ab81224b242762c4eaf968dbbb0c570b75e650667d6b6a65ae3c653e8e618eee1380d9c023bbaa2674bddf5d456ae70eda3_1280.jpg" 
-                alt="Sobre a SC Clínica de Fisioterapia" 
-                class="object-cover w-full h-auto rounded-lg shadow-xl"
-              />
-              <div class="absolute bottom-0 right-0 p-6 transform translate-y-1/4 bg-blue-600 rounded-lg shadow-xl md:translate-x-1/4">
-                <div class="flex items-center">
-                  <div class="mr-4 text-white">
-                    <svg class="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"></path>
-                    </svg>
-                  </div>
-                  <div>
-                    <p class="text-xl font-bold text-white">10+ Anos</p>
-                    <p class="text-blue-100">De Experiência</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="w-full pl-0 md:w-1/2 md:pl-16" data-aos="fade-left">
-            <h2 class="section-title">Conheça a SC Clínica</h2>
-            <p class="mb-6 text-gray-600">
+    <section id="about" class=" w-full bg-gradient-to-br from-primary-1/20 to-secondary/20 py-4 px-4 md:px-8">
+      <div class="max-w-7xl mx-auto">
+        <div class="flex flex-col-reverse md:flex-row items-center gap-12">
+
+          <!-- Texto -->
+          <div class="w-full md:w-1/2" data-aos="fade-left">
+            <h2 class="section-title text-3xl md:text-4xl text-primary-1 mb-4 text-center md:text-left">
+              Conheça a SC Clínica
+            </h2>
+            <p class="mb-6 text-gray-700 leading-relaxed text-center md:text-left">
               Fundada com a missão de proporcionar cuidados de fisioterapia de excelência, a SC Clínica se destaca por combinar conhecimento técnico, tecnologia avançada e atendimento humanizado.
             </p>
-            <p class="mb-6 text-gray-600">
+            <p class="mb-6 text-gray-700 leading-relaxed text-center md:text-left">
               Nossa equipe multidisciplinar de fisioterapeutas especializados trabalha com dedicação para criar planos de tratamento personalizados que atendam às necessidades específicas de cada paciente, promovendo recuperação eficaz e bem-estar duradouro.
             </p>
-            
-            <div class="grid grid-cols-1 gap-4 mt-8 sm:grid-cols-2">
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 mt-6">
               <div class="flex items-start">
-                <div class="flex-shrink-0 p-2 mr-4 text-blue-600 bg-blue-100 rounded-full">
-                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <div class="p-2 mr-4 bg-blue-100 text-blue-600 rounded-full">
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
                   </svg>
                 </div>
@@ -525,8 +510,8 @@
                 </div>
               </div>
               <div class="flex items-start">
-                <div class="flex-shrink-0 p-2 mr-4 text-blue-600 bg-blue-100 rounded-full">
-                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <div class="p-2 mr-4 bg-blue-100 text-blue-600 rounded-full">
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
                   </svg>
                 </div>
@@ -536,16 +521,50 @@
                 </div>
               </div>
             </div>
-            
-            <div class="mt-10">
-              <a href="#contact" class="btn-primary">
-                Entre em Contato
-              </a>
+
+            <div class="mt-10 flex flex-col sm:flex-row items-center gap-4 justify-center md:justify-start">
+              <a href="#contact" class="btn-primary">Entre em Contato</a>
+              <button @click="openModal()" class="px-6 py-2 text-white bg-blue-600 rounded-lg shadow hover:bg-blue-700 transition">
+                Ver em Tela Cheia
+              </button>
+            </div>
+          </div>
+
+          <!-- Vídeo -->
+          <div class="w-full md:w-1/2" data-aos="fade-right">
+            <div class="flex flex-col items-center">
+              <h2 class="font-poppins text-2xl sm:text-3xl md:text-4xl font-bold text-primary-1 mb-4 text-center">
+                Conheça nossa estrutura mais de perto:
+              </h2>
+              <video
+                class="h-[30vh] sm:h-[40vh] md:h-[60vh] lg:h-[80vh] w-full object-cover rounded-xl shadow-2xl"
+                src="/src/assets/clinica.mp4"
+                autoplay
+                loop
+                muted
+                playsinline
+              ></video>
             </div>
           </div>
         </div>
       </div>
+
+      <!-- Modal -->
+      <div id="videoModal" class="fixed inset-0 bg-black/90 flex items-center justify-center z-50 hidden">
+        <div class="relative w-full max-w-4xl p-4">
+          <button @click="closeModal()" class="absolute top-2 right-2 text-white text-2xl font-bold z-50">&times;</button>
+          <video
+            class="w-full h-[50vh] sm:h-[60vh] md:h-[70vh] lg:h-[80vh] object-contain rounded-xl shadow-lg"
+            src="/src/assets/clinica.mp4"
+            autoplay
+            loop
+            muted
+            controls
+          ></video>
+        </div>
+      </div>
     </section>
+
 
     <!-- Depoimentos -->
     <section id="testimonials" class="section-padding bg-white">
@@ -746,7 +765,7 @@
                 poster="https://images.unsplash.com/photo-1559757175-0eb30cd8c063?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80"
                 class="w-full h-full object-cover"
               >
-                <source src="https://sample-videos.com/zip/10/mp4/SampleVideo_1280x720_1mb.mp4" type="video/mp4">
+                <source src="/src/assets/localizacao.mp4" type="video/mp4">
                 Seu navegador não suporta vídeo.
               </video>
             </div>
@@ -1201,6 +1220,9 @@
   </script>
 
   <script>
+
+
+    
     document.addEventListener('DOMContentLoaded', function() {
       AOS.init({
         duration: 800,
@@ -1209,6 +1231,8 @@
         offset: 100
       });
     });
+
+    
 
     const { createApp, ref, onMounted, onUnmounted } = Vue;
     
@@ -1254,45 +1278,45 @@
             nome: 'Fisioterapia Ortopédica',
             slug: 'fisioterapia-ortopedica',
             descricao: 'Tratamento especializado para lesões musculoesqueléticas, dores articulares e recuperação pós-cirúrgica.',
-            icon: '<svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg>',
+            icon: '<img class="w-24" src="/src/assets/fisioterapia.png" />',
+            img: '/src/assets/fisio-info.jpg',
             tags: ['Dor nas costas', 'Pós-operatório', 'Articulações']
           },
           {
             nome: 'Fisioterapia Neurológica',
             slug: 'fisioterapia-neurologica',
             descricao: 'Reabilitação para pacientes com lesões neurológicas, focando em funcionalidade e equilíbrio.',
-            icon: '<svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path></svg>',
+            icon: '<img class="w-24" src="/src/assets/cerebro.png" />',
+            img: '/src/assets/psi.jpg',
             tags: ['AVC', 'Parkinson', 'Equilíbrio']
-          },
-          {
-            nome: 'Fisioterapia Esportiva',
-            slug: 'fisioterapia-esportiva',
-            descricao: 'Prevenção e tratamento de lesões esportivas com programas específicos de retorno às atividades.',
-            icon: '<svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>',
-            tags: ['Lesões', 'Recuperação', 'Performance']
           },
           {
             nome: 'Pilates Clínico',
             slug: 'pilates-clinico',
             descricao: 'Método terapêutico que combina fortalecimento, alongamento e consciência corporal.',
-            icon: '<svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg>',
+            icon: '<img class="w-24" src="/src/assets/pilates.png" />',
+            img: '/src/assets/pilates-info.jpg',
             tags: ['Fortalecimento', 'Postura', 'Flexibilidade']
           },
           {
             nome: 'Acupuntura',
             slug: 'acupuntura',
             descricao: 'Técnica milenar para alívio da dor, equilíbrio energético e tratamento de diversas condições.',
-            icon: '<svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg>',
+            icon: '<img class="w-24" src="/src/assets/acupuntura.png" />',
+            img: '/src/assets/acupuntura.jpg',
             tags: ['Dor crônica', 'Estresse', 'Bem-estar']
           },
           {
             nome: 'Reabilitação Vestibular',
             slug: 'reabilitacao-vestibular',
             descricao: 'Tratamento especializado para distúrbios do equilíbrio, tontura e vertigem.',
-            icon: '<svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path></svg>',
+            icon: '<img class="w-24" src="/src/assets/quiropraxia.png" />',
+            img: '/src/assets/Quiropraxia.jpg',
             tags: ['Vertigem', 'Tontura', 'Equilíbrio']
           }
         ]);
+
+
 
         // Testimonials
         const currentTestimonialSlide = ref(0);
@@ -1499,6 +1523,15 @@ Mensagem: ${agendamento.value.mensagem}`;
           if (testimonialsInterval) clearInterval(testimonialsInterval);
         });
 
+
+              const openModal = () => {
+                document.getElementById("videoModal").classList.remove("hidden");
+              }
+
+              const closeModal = () => {
+                document.getElementById("videoModal").classList.add("hidden");
+              }
+
         return {
           mobileMenuOpen,
           form,
@@ -1525,7 +1558,9 @@ Mensagem: ${agendamento.value.mensagem}`;
           prevTeamMember,
           submitForm,
           submitAgendamento,
-          updateSlideView
+          updateSlideView,
+          openModal,
+          closeModal
         };
       }
     }).mount('#app');
