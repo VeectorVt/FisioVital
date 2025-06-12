@@ -1,0 +1,114 @@
+# 🏥 SC Clin – Landing Page Premium (Projeto de R$1000)
+
+> ✔️ Base: Vue.js + Tailwind CSS  
+> 📁 Objetivo: Ajustar e enriquecer a base atual com seções modernas, animações e estrutura premium para aumentar autoridade, confiança e conversão.
+
+---
+
+## 🎯 OBJETIVO GERAL
+Construir uma landing page de alto impacto visual e profissionalismo para a SC Clin, incorporando vídeo, carrosséis, botões de ação, depoimentos e seções interativas. Totalmente responsiva, rápida e integrada com ferramentas de análise e comunicação.
+
+---
+
+## ✅ CHECKLIST DE SEÇÕES E FUNCIONALIDADES
+
+### 🎬 Hero Section
+- [ ] Substituir imagem estática por **vídeo institucional** da clínica.
+- [ ] Título e subtítulo com CTA: “Agende sua avaliação gratuita”.
+- [ ] Fundo com **degradê animado** e `fade-in`.
+- [ ] Estilo parallax leve ao rolar.
+
+---
+
+### 🧾 Seção de Serviços
+- [ ] **Carrossel automático** com rolagem manual também.
+- [ ] Cada serviço com:
+  - Ícone
+  - Nome
+  - Breve descrição
+  - Animação `hover`
+  - **Link para uma rota exclusiva (`/servicos/:nome`)**
+- [ ] Layout horizontal, com botões de navegação.
+
+---
+
+### 📸 CTA Intermediário (Div Personalizada)
+- [ ] Seção com **fotos reais** da clínica.
+- [ ] Texto de chamada forte.
+- [ ] Botão: “Quero agendar agora” com destaque visual (`hover`, `scale`, `ring` etc).
+
+---
+
+### 🏥 Estrutura + Sobre
+- [ ] Texto introdutório sobre a clínica.
+- [ ] Botão: “Conheça nossa estrutura” → Redireciona para rota `/sobre`.
+- [ ] Layout com imagem + texto, estilo 2 colunas no desktop.
+
+---
+
+### 💬 Depoimentos
+- [ ] Carrossel com 3 tipos de entrada:
+  - Texto + foto do paciente
+  - Vídeo real
+  - Nome e cargo (se aplicável)
+- [ ] Navegação manual e automática.
+
+---
+
+### 👩‍⚕️ Equipe
+- [ ] Carrossel com fotos quadradas, nome, cargo e mini-bio.
+- [ ] Botão: “Saiba mais” → Redireciona para página com + detalhes da equipe (`/equipe`).
+- [ ] Layout moderno com animações no hover.
+
+---
+
+### 🗺️ Localização e Como Chegar
+- [ ] Vídeo mostrando acesso/localização.
+- [ ] Embed do **Google Maps**.
+- [ ] Botão: “Ver localização completa” → redireciona para rota `/como-chegar`.
+
+---
+
+### 📲 Botões Flutuantes
+- [ ] WhatsApp: canto inferior direito, com mensagem “Olá! Gostaria de agendar uma avaliação.”
+- [ ] Instagram: ícone fixo ao lado.
+
+---
+
+### 🎞️ Destaques do Instagram
+- [ ] Carrossel com os vídeos mais engajados do perfil da clínica.
+- [ ] Estilo visual similar a stories, com autoplay.
+
+---
+
+### 🗓️ Agendamento
+- [ ] Formulário com campos:
+  - Nome
+  - E-mail
+  - Telefone
+  - Dropdown com serviços
+- [ ] Botão: “Enviar”
+- [ ] Integração com Mailchimp (ou fallback via WhatsApp).
+
+---
+
+## 🔧 FUNCIONALIDADES ADICIONAIS
+
+- [ ] Google Analytics instalado com eventos para:
+  - Clique no CTA
+  - Envio de formulário
+  - Acessos ao WhatsApp
+- [ ] Lazy-loading de vídeos e imagens.
+- [ ] Minificação automática no build.
+- [ ] SEO básico (meta tags, título, favicon).
+- [ ] `scroll-behavior: smooth` global.
+- [ ] Animações no arrastar do mouse (`drag`, `hover`, `fade-in`).
+
+---
+
+## 🎨 PALETA DE CORES
+
+```js
+'primary-1': '#2AB391', // Verde principal
+'primary-2': '#7DD8C0', // Verde claro
+'secondary': '#E9D8A6', // Dourado claro

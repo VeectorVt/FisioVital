@@ -10,6 +10,44 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
   <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
   <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            'primary-1': '#2AB391',
+            'primary-2': '#7DD8C0', 
+            'secondary': '#E9D8A6'
+          },
+          animation: {
+            'fade-in': 'fadeIn 1s ease-in-out',
+            'slide-up': 'slideUp 0.8s ease-out',
+            'parallax': 'parallax 20s linear infinite',
+            'float': 'float 3s ease-in-out infinite'
+          },
+          keyframes: {
+            fadeIn: {
+              '0%': { opacity: '0', transform: 'translateY(20px)' },
+              '100%': { opacity: '1', transform: 'translateY(0)' }
+            },
+            slideUp: {
+              '0%': { opacity: '0', transform: 'translateY(30px)' },
+              '100%': { opacity: '1', transform: 'translateY(0)' }
+            },
+            parallax: {
+              '0%': { backgroundPosition: '0% 50%' },
+              '50%': { backgroundPosition: '100% 50%' },
+              '100%': { backgroundPosition: '0% 50%' }
+            },
+            float: {
+              '0%, 100%': { transform: 'translateY(0px)' },
+              '50%': { transform: 'translateY(-10px)' }
+            }
+          }
+        }
+      }
+    }
+  </script>
   <style>
     html {
       scroll-behavior: smooth;
@@ -55,27 +93,61 @@
     .btn-primary {
       display: inline-block;
       padding: 0.75rem 1.5rem;
-      font-weight: 500;
+      font-weight: 600;
       color: white;
-      background-color: #2b6cb0;
-      border-radius: 0.375rem;
-      transition: all 0.3s;
+      background: linear-gradient(135deg, #2AB391, #7DD8C0);
+      border-radius: 0.5rem;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(42, 179, 145, 0.3);
     }
     .btn-primary:hover {
-      background-color: #2c5282;
+      transform: translateY(-2px) scale(1.02);
+      box-shadow: 0 8px 25px rgba(42, 179, 145, 0.4);
+      background: linear-gradient(135deg, #7DD8C0, #2AB391);
     }
     .btn-secondary {
       display: inline-block;
       padding: 0.75rem 1.5rem;
-      font-weight: 500;
-      color: #2b6cb0;
+      font-weight: 600;
+      color: #2AB391;
       background-color: white;
-      border: 1px solid #2b6cb0;
-      border-radius: 0.375rem;
-      transition: all 0.3s;
+      border: 2px solid #2AB391;
+      border-radius: 0.5rem;
+      transition: all 0.3s ease;
     }
     .btn-secondary:hover {
-      background-color: #ebf8ff;
+      background: linear-gradient(135deg, #2AB391, #7DD8C0);
+      color: white;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(42, 179, 145, 0.3);
+    }
+    .gradient-bg {
+      background: linear-gradient(-45deg, #2AB391, #7DD8C0, #E9D8A6, #2AB391);
+      background-size: 400% 400%;
+      animation: parallax 15s ease infinite;
+    }
+    .video-overlay {
+      background: rgba(0, 0, 0, 0.3);
+    }
+    .carousel-container {
+      overflow: hidden;
+      position: relative;
+    }
+    .carousel-track {
+      display: flex;
+      transition: transform 0.5s ease-in-out;
+    }
+    .floating-btn {
+      position: fixed;
+      z-index: 1000;
+      transition: all 0.3s ease;
+    }
+    .floating-btn:hover {
+      transform: scale(1.1);
+    }
+    .parallax-element {
+      transform: translateZ(0);
+      backface-visibility: hidden;
     }
   </style>
 </head>
@@ -141,32 +213,53 @@
     </nav>
 
     <!-- Hero Section -->
-    <section id="home" class="pt-24 overflow-hidden bg-gradient-to-br from-blue-50 to-green-50">
-      <div class="container flex flex-col items-center px-4 py-16 md:py-24 md:flex-row">
-        <div class="w-full mb-16 text-center md:w-1/2 md:pr-12 md:text-left md:mb-0" data-aos="fade-up">
-          <h1 class="mb-4 text-4xl font-bold text-gray-800 md:text-5xl">
-            Cuidado especializado para sua saúde física
+    <section id="home" class="relative pt-24 overflow-hidden min-h-screen gradient-bg">
+      <!-- Video Background -->
+      <div class="absolute inset-0 z-0">
+        <video 
+          autoplay 
+          muted 
+          loop 
+          playsinline
+          class="object-cover w-full h-full"
+          poster="https://images.unsplash.com/photo-1576091160399-112ba8d25d1f?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80"
+        >
+          <source src="https://player.vimeo.com/external/371433846.sd.mp4?s=236da2f3c0fd273d2c6d9a064f3ae35579b2bbdf&profile_id=139&oauth2_token_id=57447761" type="video/mp4">
+          <!-- Fallback image -->
+          <img src="https://images.unsplash.com/photo-1576091160399-112ba8d25d1f?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80" alt="SC Clínica" class="object-cover w-full h-full">
+        </video>
+        <div class="absolute inset-0 video-overlay"></div>
+      </div>
+
+      <!-- Content -->
+      <div class="relative z-10 container flex flex-col items-center px-4 py-24 md:py-32 md:flex-row min-h-screen justify-center">
+        <div class="w-full text-center md:w-2/3 animate-fade-in">
+          <h1 class="mb-6 text-5xl font-bold text-white md:text-7xl leading-tight">
+            Sua <span class="text-secondary">Recuperação</span><br>
+            Nossa <span class="text-primary-2">Especialidade</span>
           </h1>
-          <p class="mb-8 text-lg text-gray-600 md:text-xl">
-            A SC Clínica oferece tratamentos personalizados de fisioterapia para ajudar você a recuperar sua mobilidade e eliminar a dor, melhorando sua qualidade de vida.
+          <p class="mb-8 text-xl text-white md:text-2xl opacity-90 max-w-3xl mx-auto">
+            Transforme sua vida com nossos tratamentos especializados de fisioterapia. 
+            Agende sua avaliação gratuita e descubra o caminho para uma vida sem dor.
           </p>
-          <div class="flex flex-col space-y-4 sm:flex-row sm:space-y-0 sm:space-x-4">
-            <a href="#contact" class="btn-primary">
-              Agendar Consulta
+          <div class="flex flex-col space-y-4 sm:flex-row sm:space-y-0 sm:space-x-6 justify-center">
+            <a href="#agendamento" class="btn-primary text-lg px-8 py-4 animate-float">
+              🎯 Agende sua Avaliação Gratuita
             </a>
-            <a href="#services" class="btn-secondary">
-              Nossos Serviços
+            <a href="#services" class="btn-secondary text-lg px-8 py-4">
+              Conheça Nossos Serviços
             </a>
           </div>
         </div>
-        <div class="w-full md:w-1/2" data-aos="fade-left" data-aos-delay="200">
-          <img 
-            src="https://pixabay.com/get/g1dfff3abe0546c6229eb162cf00132998655546be7db8fe64db32c990013c3e88526e680caecb920f995edcf619e302edec5caebce6ed2e822571d9b482cb3ee_1280.jpg"
-            alt="Interior da clínica de fisioterapia" 
-            class="object-cover w-full h-auto rounded-lg shadow-xl"
-          />
+      </div>
+
+      <!-- Scroll Indicator -->
+      <div class="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce">
+        <div class="w-6 h-10 border-2 border-white rounded-full flex justify-center">
+          <div class="w-1 h-3 bg-white rounded-full mt-2 animate-pulse"></div>
         </div>
       </div>
+    </section>
       <div class="container px-4 py-8 mx-auto">
         <div class="grid grid-cols-1 gap-8 md:grid-cols-3">
           <div class="flex items-center p-6 bg-white rounded-lg shadow-md" data-aos="fade-up" data-aos-delay="100">
@@ -207,80 +300,184 @@
     </section>
 
     <!-- Serviços -->
-    <section id="services" class="section-padding bg-white">
+    <section id="services" class="section-padding bg-gradient-to-br from-primary-2/10 to-secondary/20">
       <div class="container">
         <div class="text-center mb-16" data-aos="fade-up">
-          <h2 class="section-title">Nossos Serviços</h2>
-          <p class="section-subtitle">Conheça os tratamentos especializados que oferecemos para melhorar sua saúde</p>
+          <h2 class="section-title text-gray-800">Nossos Serviços Especializados</h2>
+          <p class="section-subtitle text-gray-600 max-w-2xl mx-auto">Descubra nossos tratamentos de excelência, desenvolvidos para proporcionar sua recuperação completa</p>
         </div>
 
-        <div class="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
-          <!-- Fisioterapia Ortopédica -->
-          <div class="overflow-hidden transition-transform duration-300 bg-white rounded-lg shadow-lg hover:shadow-xl hover:-translate-y-2" data-aos="fade-up" data-aos-delay="100">
-            <img 
-              src="https://pixabay.com/get/g17a97cb222d4d792a5e92b053445fbdcab890a5463954216f95119594ea6215adcaaa4553dc1cc5cfc2cfb7790e1630c809b98c014b870eabdc2a56b54f27e77_1280.jpg" 
-              alt="Fisioterapia Ortopédica" 
-              class="object-cover w-full h-56"
-            />
-            <div class="p-6">
-              <h3 class="mb-3 text-xl font-bold text-gray-800">Fisioterapia Ortopédica</h3>
-              <p class="mb-4 text-gray-600">Tratamento para lesões musculoesqueléticas, dores articulares, recuperação pós-cirúrgica e condições ortopédicas diversas.</p>
-              <div class="mt-4">
-                <span class="inline-block px-3 py-1 mb-2 mr-2 text-sm text-blue-700 bg-blue-100 rounded-full">Dor nas costas</span>
-                <span class="inline-block px-3 py-1 mb-2 mr-2 text-sm text-blue-700 bg-blue-100 rounded-full">Pós-operatório</span>
-                <span class="inline-block px-3 py-1 mb-2 text-sm text-blue-700 bg-blue-100 rounded-full">Articulações</span>
+        <!-- Carousel Container -->
+        <div class="relative carousel-container mb-12" data-aos="fade-up" data-aos-delay="200">
+          <div class="carousel-track" :style="{ transform: `translateX(-${currentSlide * slideWidth}%)` }">
+            <div v-for="(servico, index) in servicos" :key="index" class="carousel-slide flex-none w-full md:w-1/2 lg:w-1/3 px-4">
+              <div class="group bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-500 transform hover:scale-105 overflow-hidden">
+                <!-- Service Icon -->
+                <div class="relative p-8 text-center bg-gradient-to-br from-primary-1 to-primary-2">
+                  <div class="inline-flex items-center justify-center w-20 h-20 mx-auto mb-4 bg-white rounded-full shadow-lg group-hover:animate-float">
+                    <div v-html="servico.icon" class="w-10 h-10 text-primary-1"></div>
+                  </div>
+                  <h3 class="text-xl font-bold text-white">{{ servico.nome }}</h3>
+                </div>
+                
+                <!-- Service Content -->
+                <div class="p-6">
+                  <p class="text-gray-600 mb-6 leading-relaxed">{{ servico.descricao }}</p>
+                  
+                  <!-- Tags -->
+                  <div class="mb-6">
+                    <div v-for="tag in servico.tags" :key="tag" class="inline-block px-3 py-1 mb-2 mr-2 text-sm text-primary-1 bg-primary-1/10 rounded-full">
+                      {{ tag }}
+                    </div>
+                  </div>
+                  
+                  <!-- CTA Button -->
+                  <a :href="'/servicos/' + servico.slug" class="block w-full text-center btn-primary group-hover:shadow-lg">
+                    Saiba Mais
+                    <svg class="inline-block w-4 h-4 ml-2 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                    </svg>
+                  </a>
+                </div>
               </div>
             </div>
           </div>
-
-          <!-- Fisioterapia Neurológica -->
-          <div class="overflow-hidden transition-transform duration-300 bg-white rounded-lg shadow-lg hover:shadow-xl hover:-translate-y-2" data-aos="fade-up" data-aos-delay="200">
-            <img 
-              src="https://pixabay.com/get/g26b7c980b30cb4150cae478156824015a56155a77fa0fa55f9196686847d4b83e86f48840f803c0f818d38dc6f817e9f05a2b3b56eeb95adfbd5bae1fd22b5ea_1280.jpg" 
-              alt="Fisioterapia Neurológica" 
-              class="object-cover w-full h-56"
-            />
-            <div class="p-6">
-              <h3 class="mb-3 text-xl font-bold text-gray-800">Fisioterapia Neurológica</h3>
-              <p class="mb-4 text-gray-600">Reabilitação para pacientes com lesões neurológicas, visando melhorar a funcionalidade, equilíbrio e qualidade de vida.</p>
-              <div class="mt-4">
-                <span class="inline-block px-3 py-1 mb-2 mr-2 text-sm text-blue-700 bg-blue-100 rounded-full">AVC</span>
-                <span class="inline-block px-3 py-1 mb-2 mr-2 text-sm text-blue-700 bg-blue-100 rounded-full">Parkinson</span>
-                <span class="inline-block px-3 py-1 mb-2 text-sm text-blue-700 bg-blue-100 rounded-full">Equilíbrio</span>
-              </div>
-            </div>
-          </div>
-
-          <!-- Fisioterapia Esportiva -->
-          <div class="overflow-hidden transition-transform duration-300 bg-white rounded-lg shadow-lg hover:shadow-xl hover:-translate-y-2" data-aos="fade-up" data-aos-delay="300">
-            <img 
-              src="https://pixabay.com/get/gbb75731bb4d48ee5966498b645db5476b303476dc3864167ccd21b9309174c60d6b02d7fd3834413ae4beeec605e8dfc30811b3ab2264db86f4f2bdd6595981a_1280.jpg" 
-              alt="Fisioterapia Esportiva" 
-              class="object-cover w-full h-56"
-            />
-            <div class="p-6">
-              <h3 class="mb-3 text-xl font-bold text-gray-800">Fisioterapia Esportiva</h3>
-              <p class="mb-4 text-gray-600">Tratamento e prevenção de lesões relacionadas ao esporte, reabilitação específica e programas de retorno às atividades.</p>
-              <div class="mt-4">
-                <span class="inline-block px-3 py-1 mb-2 mr-2 text-sm text-blue-700 bg-blue-100 rounded-full">Lesões</span>
-                <span class="inline-block px-3 py-1 mb-2 mr-2 text-sm text-blue-700 bg-blue-100 rounded-full">Recuperação</span>
-                <span class="inline-block px-3 py-1 mb-2 text-sm text-blue-700 bg-blue-100 rounded-full">Desempenho</span>
-              </div>
-            </div>
+          
+          <!-- Navigation Buttons -->
+          <button @click="prevSlide" class="absolute left-4 top-1/2 transform -translate-y-1/2 w-12 h-12 bg-white rounded-full shadow-lg flex items-center justify-center hover:bg-primary-1 hover:text-white transition-all duration-300">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+            </svg>
+          </button>
+          <button @click="nextSlide" class="absolute right-4 top-1/2 transform -translate-y-1/2 w-12 h-12 bg-white rounded-full shadow-lg flex items-center justify-center hover:bg-primary-1 hover:text-white transition-all duration-300">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+            </svg>
+          </button>
+          
+          <!-- Dots Indicator -->
+          <div class="flex justify-center mt-8 space-x-2">
+            <button 
+              v-for="(dot, index) in Math.ceil(servicos.length / slidesPerView)" 
+              :key="index"
+              @click="goToSlide(index)"
+              :class="['w-3 h-3 rounded-full transition-all duration-300', currentSlide === index ? 'bg-primary-1' : 'bg-gray-300']"
+            ></button>
           </div>
         </div>
 
-        <div class="mt-16 text-center" data-aos="fade-up">
-          <p class="mb-8 text-lg text-gray-600">Não encontrou o serviço que procura? Entre em contato para saber sobre outros tratamentos disponíveis.</p>
-          <a href="#contact" class="btn-primary">
-            Consulta Especializada
+        <!-- CTA Section -->
+        <div class="text-center bg-white rounded-2xl p-8 shadow-lg" data-aos="fade-up" data-aos-delay="400">
+          <h3 class="text-2xl font-bold text-gray-800 mb-4">Precisa de um Tratamento Específico?</h3>
+          <p class="text-gray-600 mb-6">Nossa equipe especializada está pronta para criar um plano personalizado para suas necessidades</p>
+          <a href="#agendamento" class="btn-primary text-lg px-8 py-4">
+            Agendar Avaliação Gratuita
           </a>
         </div>
       </div>
     </section>
 
+    <!-- CTA Intermediário -->
+    <section class="section-padding bg-white">
+      <div class="container">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+          <!-- Images Gallery -->
+          <div class="grid grid-cols-2 gap-4" data-aos="fade-right">
+            <div class="space-y-4">
+              <img 
+                src="https://images.unsplash.com/photo-1559757148-5c350d0d3c56?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" 
+                alt="Equipamentos modernos da SC Clínica" 
+                class="w-full h-48 object-cover rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:scale-105"
+              />
+              <img 
+                src="https://images.unsplash.com/photo-1576091160550-2173dba999ef?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" 
+                alt="Sala de atendimento da SC Clínica" 
+                class="w-full h-64 object-cover rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:scale-105"
+              />
+            </div>
+            <div class="space-y-4 pt-8">
+              <img 
+                src="https://images.unsplash.com/photo-1582750433449-648ed127bb54?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" 
+                alt="Fisioterapeuta atendendo paciente" 
+                class="w-full h-64 object-cover rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:scale-105"
+              />
+              <img 
+                src="https://images.unsplash.com/photo-1584432810601-6c7f27d2362b?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" 
+                alt="Recepção moderna da clínica" 
+                class="w-full h-48 object-cover rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:scale-105"
+              />
+            </div>
+          </div>
+
+          <!-- Content -->
+          <div class="space-y-8" data-aos="fade-left">
+            <div>
+              <h2 class="text-4xl font-bold text-gray-800 mb-6 leading-tight">
+                Ambiente Moderno e <span class="text-primary-1">Acolhedor</span> 
+                Para Sua <span class="text-secondary">Recuperação</span>
+              </h2>
+              <p class="text-xl text-gray-600 leading-relaxed mb-8">
+                Nossa clínica conta com instalações de última geração e uma equipe altamente qualificada para proporcionar o melhor tratamento fisioterapêutico. Venha conhecer nosso espaço projetado especialmente para seu bem-estar.
+              </p>
+            </div>
+
+            <!-- Features -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+              <div class="flex items-center space-x-3">
+                <div class="w-12 h-12 bg-primary-1 rounded-full flex items-center justify-center">
+                  <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                  </svg>
+                </div>
+                <span class="text-gray-700 font-medium">Equipamentos de Última Geração</span>
+              </div>
+              <div class="flex items-center space-x-3">
+                <div class="w-12 h-12 bg-primary-1 rounded-full flex items-center justify-center">
+                  <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                  </svg>
+                </div>
+                <span class="text-gray-700 font-medium">Ambiente Higienizado</span>
+              </div>
+              <div class="flex items-center space-x-3">
+                <div class="w-12 h-12 bg-primary-1 rounded-full flex items-center justify-center">
+                  <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                  </svg>
+                </div>
+                <span class="text-gray-700 font-medium">Profissionais Especializados</span>
+              </div>
+              <div class="flex items-center space-x-3">
+                <div class="w-12 h-12 bg-primary-1 rounded-full flex items-center justify-center">
+                  <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                  </svg>
+                </div>
+                <span class="text-gray-700 font-medium">Atendimento Personalizado</span>
+              </div>
+            </div>
+
+            <!-- CTA Button -->
+            <div class="pt-6">
+              <a 
+                href="#agendamento" 
+                class="inline-flex items-center btn-primary text-xl px-10 py-5 group transform hover:scale-105 hover:shadow-2xl transition-all duration-300"
+                onclick="gtag('event', 'click', {'event_category': 'CTA', 'event_label': 'Quero agendar agora - CTA Section'})"
+              >
+                <span class="mr-3">🎯</span>
+                Quero Agendar Agora
+                <svg class="w-6 h-6 ml-3 transition-transform group-hover:translate-x-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
+                </svg>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <!-- Sobre Nós -->
-    <section id="about" class="section-padding bg-gradient-to-br from-blue-50 to-green-50">
+    <section id="about" class="section-padding bg-gradient-to-br from-secondary/20 to-primary-2/10">
       <div class="container">
         <div class="flex flex-col items-center md:flex-row">
           <div class="w-full mb-12 md:w-1/2 md:mb-0" data-aos="fade-right">
@@ -349,12 +546,435 @@
       </div>
     </section>
 
-    <!-- Contato -->
-    <section id="contact" class="section-padding bg-white">
+    <!-- Depoimentos -->
+    <section id="testimonials" class="section-padding bg-white">
       <div class="container">
         <div class="text-center mb-16" data-aos="fade-up">
-          <h2 class="section-title">Entre em Contato</h2>
-          <p class="section-subtitle">Estamos prontos para atender você e tirar todas as suas dúvidas</p>
+          <h2 class="section-title text-gray-800">O Que Nossos Pacientes Dizem</h2>
+          <p class="section-subtitle text-gray-600 max-w-2xl mx-auto">Histórias reais de transformação e recuperação que inspiram nossa dedicação diária</p>
+        </div>
+
+        <!-- Testimonials Carousel -->
+        <div class="relative carousel-container mb-12" data-aos="fade-up" data-aos-delay="200">
+          <div class="carousel-track" :style="{ transform: `translateX(-${currentTestimonialSlide * 100}%)` }">
+            <div v-for="(depoimento, index) in depoimentos" :key="index" class="carousel-slide flex-none w-full px-4">
+              <div class="max-w-4xl mx-auto">
+                <div v-if="depoimento.tipo === 'texto'" class="bg-gradient-to-br from-primary-1/5 to-primary-2/5 rounded-2xl p-8 md:p-12 text-center">
+                  <!-- Quote Icon -->
+                  <div class="w-16 h-16 mx-auto mb-6 bg-primary-1 rounded-full flex items-center justify-center">
+                    <svg class="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h4v10h-10z"/>
+                    </svg>
+                  </div>
+                  
+                  <!-- Testimonial Text -->
+                  <blockquote class="text-xl md:text-2xl text-gray-700 leading-relaxed mb-8 italic">
+                    "{{ depoimento.texto }}"
+                  </blockquote>
+                  
+                  <!-- Patient Info -->
+                  <div class="flex items-center justify-center space-x-4">
+                    <img :src="depoimento.foto" :alt="depoimento.nome" class="w-16 h-16 rounded-full object-cover border-4 border-white shadow-lg">
+                    <div class="text-left">
+                      <h4 class="font-bold text-gray-800 text-lg">{{ depoimento.nome }}</h4>
+                      <p class="text-primary-1 font-medium">{{ depoimento.tratamento }}</p>
+                      <div class="flex mt-2">
+                        <svg v-for="i in 5" :key="i" class="w-4 h-4 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
+                          <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                        </svg>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div v-else-if="depoimento.tipo === 'video'" class="bg-gradient-to-br from-primary-1/5 to-primary-2/5 rounded-2xl p-6 md:p-8">
+                  <!-- Video Container -->
+                  <div class="aspect-video rounded-xl overflow-hidden mb-6 shadow-2xl">
+                    <video 
+                      :src="depoimento.videoUrl" 
+                      controls 
+                      :poster="depoimento.videoPoster"
+                      class="w-full h-full object-cover"
+                    >
+                      Seu navegador não suporta vídeo.
+                    </video>
+                  </div>
+                  
+                  <!-- Patient Info -->
+                  <div class="text-center">
+                    <h4 class="font-bold text-gray-800 text-xl mb-2">{{ depoimento.nome }}</h4>
+                    <p class="text-primary-1 font-medium text-lg">{{ depoimento.tratamento }}</p>
+                    <p class="text-gray-600 mt-2">{{ depoimento.resumo }}</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Navigation -->
+          <button @click="prevTestimonial" class="absolute left-4 top-1/2 transform -translate-y-1/2 w-12 h-12 bg-white rounded-full shadow-lg flex items-center justify-center hover:bg-primary-1 hover:text-white transition-all duration-300">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+            </svg>
+          </button>
+          <button @click="nextTestimonial" class="absolute right-4 top-1/2 transform -translate-y-1/2 w-12 h-12 bg-white rounded-full shadow-lg flex items-center justify-center hover:bg-primary-1 hover:text-white transition-all duration-300">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+            </svg>
+          </button>
+
+          <!-- Dots -->
+          <div class="flex justify-center mt-8 space-x-2">
+            <button 
+              v-for="(dot, index) in depoimentos.length" 
+              :key="index"
+              @click="goToTestimonial(index)"
+              :class="['w-3 h-3 rounded-full transition-all duration-300', currentTestimonialSlide === index ? 'bg-primary-1' : 'bg-gray-300']"
+            ></button>
+          </div>
+        </div>
+
+        <!-- CTA -->
+        <div class="text-center bg-gradient-to-r from-primary-1 to-primary-2 rounded-2xl p-8 text-white" data-aos="fade-up" data-aos-delay="400">
+          <h3 class="text-2xl font-bold mb-4">Seja Você o Próximo a Transformar Sua Vida</h3>
+          <p class="text-xl opacity-90 mb-6">Junte-se aos milhares de pacientes que já recuperaram sua qualidade de vida</p>
+          <a href="#agendamento" class="inline-block bg-white text-primary-1 font-bold px-8 py-4 rounded-lg hover:bg-gray-100 transition-all duration-300 transform hover:scale-105">
+            Iniciar Minha Jornada de Recuperação
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Equipe -->
+    <section id="team" class="section-padding bg-gradient-to-br from-secondary/20 to-primary-2/10">
+      <div class="container">
+        <div class="text-center mb-16" data-aos="fade-up">
+          <h2 class="section-title text-gray-800">Nossa Equipe Especializada</h2>
+          <p class="section-subtitle text-gray-600 max-w-2xl mx-auto">Conheça os profissionais dedicados ao seu bem-estar e recuperação</p>
+        </div>
+
+        <!-- Team Carousel -->
+        <div class="relative carousel-container mb-12" data-aos="fade-up" data-aos-delay="200">
+          <div class="carousel-track" :style="{ transform: `translateX(-${currentTeamSlide * teamSlideWidth}%)` }">
+            <div v-for="(membro, index) in equipe" :key="index" class="carousel-slide flex-none w-full md:w-1/2 lg:w-1/3 px-4">
+              <div class="group bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-500 transform hover:scale-105 overflow-hidden">
+                <!-- Photo -->
+                <div class="relative overflow-hidden">
+                  <img :src="membro.foto" :alt="membro.nome" class="w-full h-80 object-cover group-hover:scale-110 transition-transform duration-500">
+                  <div class="absolute inset-0 bg-gradient-to-t from-primary-1/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end justify-center p-6">
+                    <div class="text-white text-center">
+                      <p class="font-medium">{{ membro.especializacao }}</p>
+                    </div>
+                  </div>
+                </div>
+                
+                <!-- Content -->
+                <div class="p-6">
+                  <h3 class="text-xl font-bold text-gray-800 mb-2">{{ membro.nome }}</h3>
+                  <p class="text-primary-1 font-medium mb-3">{{ membro.cargo }}</p>
+                  <p class="text-gray-600 text-sm leading-relaxed mb-4">{{ membro.bio }}</p>
+                  
+                  <!-- Qualifications -->
+                  <div class="mb-4">
+                    <div v-for="qual in membro.qualificacoes" :key="qual" class="inline-block px-2 py-1 mb-1 mr-1 text-xs text-primary-1 bg-primary-1/10 rounded-full">
+                      {{ qual }}
+                    </div>
+                  </div>
+                  
+                  <!-- Social Links -->
+                  <div class="flex space-x-3">
+                    <a v-if="membro.linkedin" :href="membro.linkedin" class="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center hover:bg-primary-1 hover:text-white transition-all duration-300">
+                      <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6z"></path>
+                        <rect x="2" y="9" width="4" height="12"></rect>
+                        <circle cx="4" cy="4" r="2"></circle>
+                      </svg>
+                    </a>
+                    <a v-if="membro.instagram" :href="membro.instagram" class="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center hover:bg-primary-1 hover:text-white transition-all duration-300">
+                      <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M12.315 2c2.43 0 2.784.013 3.808.06 1.064.049 1.791.218 2.427.465a4.902 4.902 0 011.772 1.153 4.902 4.902 0 011.153 1.772c.247.636.416 1.363.465 2.427.048 1.067.06 1.407.06 4.123v.08c0 2.643-.012 2.987-.06 4.043-.049 1.064-.218 1.791-.465 2.427a4.902 4.902 0 01-1.153 1.772 4.902 4.902 0 01-1.772 1.153c-.636.247-1.363.416-2.427.465-1.067.048-1.407.06-4.123.06h-.08c-2.643 0-2.987-.012-4.043-.06-1.064-.049-1.791-.218-2.427-.465a4.902 4.902 0 01-1.772-1.153 4.902 4.902 0 01-1.153-1.772c-.247-.636-.416-1.363-.465-2.427-.047-1.024-.06-1.379-.06-3.808v-.63c0-2.43.013-2.784.06-3.808.049-1.064.218-1.791.465-2.427a4.902 4.902 0 011.153-1.772A4.902 4.902 0 015.45 2.525c.636-.247 1.363-.416 2.427-.465C8.901 2.013 9.256 2 11.685 2h.63zm-.081 1.802h-.468c-2.456 0-2.784.011-3.807.058-.975.045-1.504.207-1.857.344-.467.182-.8.398-1.15.748-.35.35-.566.683-.748 1.15-.137.353-.3.882-.344 1.857-.047 1.023-.058 1.351-.058 3.807v.468c0 2.456.011 2.784.058 3.807.045.975.207 1.504.344 1.857.182.466.399.8.748 1.15.35.35.683.566 1.15.748.353.137.882.3 1.857.344 1.054.048 1.37.058 4.041.058h.08c2.597 0 2.917-.01 3.96-.058.976-.045 1.505-.207 1.858-.344.466-.182.8-.398 1.15-.748.35-.35.566-.683.748-1.15.137-.353.3-.882.344-1.857.048-1.055.058-1.37.058-4.041v-.08c0-2.597-.01-2.917-.058-3.96-.045-.976-.207-1.505-.344-1.858a3.097 3.097 0 00-.748-1.15 3.098 3.098 0 00-1.15-.748c-.353-.137-.882-.3-1.857-.344-1.023-.047-1.351-.058-3.807-.058zM12 6.865a5.135 5.135 0 110 10.27 5.135 5.135 0 010-10.27zm0 1.802a3.333 3.333 0 100 6.666 3.333 3.333 0 000-6.666zm5.338-3.205a1.2 1.2 0 110 2.4 1.2 1.2 0 010-2.4z"></path>
+                      </svg>
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Navigation -->
+          <button @click="prevTeamMember" class="absolute left-4 top-1/2 transform -translate-y-1/2 w-12 h-12 bg-white rounded-full shadow-lg flex items-center justify-center hover:bg-primary-1 hover:text-white transition-all duration-300">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+            </svg>
+          </button>
+          <button @click="nextTeamMember" class="absolute right-4 top-1/2 transform -translate-y-1/2 w-12 h-12 bg-white rounded-full shadow-lg flex items-center justify-center hover:bg-primary-1 hover:text-white transition-all duration-300">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+            </svg>
+          </button>
+        </div>
+
+        <!-- CTA -->
+        <div class="text-center bg-white rounded-2xl p-8 shadow-lg" data-aos="fade-up" data-aos-delay="400">
+          <h3 class="text-2xl font-bold text-gray-800 mb-4">Conheça Nossa Equipe Pessoalmente</h3>
+          <p class="text-gray-600 mb-6">Agende uma visita e converse com nossos especialistas sobre seu tratamento</p>
+          <a href="/equipe" class="btn-secondary text-lg px-8 py-4 mr-4">
+            Ver Equipe Completa
+          </a>
+          <a href="#agendamento" class="btn-primary text-lg px-8 py-4">
+            Agendar Consulta
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Localização -->
+    <section id="localizacao" class="section-padding bg-white">
+      <div class="container">
+        <div class="text-center mb-16" data-aos="fade-up">
+          <h2 class="section-title text-gray-800">Nossa Localização</h2>
+          <p class="section-subtitle text-gray-600 max-w-2xl mx-auto">Venha nos visitar em nossa clínica moderna e acessível</p>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+          <!-- Video -->
+          <div class="space-y-8" data-aos="fade-right">
+            <div class="aspect-video rounded-2xl overflow-hidden shadow-2xl">
+              <video 
+                controls 
+                poster="https://images.unsplash.com/photo-1559757175-0eb30cd8c063?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80"
+                class="w-full h-full object-cover"
+              >
+                <source src="https://sample-videos.com/zip/10/mp4/SampleVideo_1280x720_1mb.mp4" type="video/mp4">
+                Seu navegador não suporta vídeo.
+              </video>
+            </div>
+            
+            <!-- Location Info -->
+            <div class="space-y-6">
+              <div class="flex items-start space-x-4">
+                <div class="w-12 h-12 bg-primary-1 rounded-full flex items-center justify-center flex-shrink-0">
+                  <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                  </svg>
+                </div>
+                <div>
+                  <h3 class="text-lg font-bold text-gray-800">Endereço</h3>
+                  <p class="text-gray-600">Av. Principal, 1234 - Centro</p>
+                  <p class="text-gray-600">São Paulo, SP - CEP 01234-567</p>
+                </div>
+              </div>
+
+              <div class="flex items-start space-x-4">
+                <div class="w-12 h-12 bg-primary-1 rounded-full flex items-center justify-center flex-shrink-0">
+                  <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                  </svg>
+                </div>
+                <div>
+                  <h3 class="text-lg font-bold text-gray-800">Horário de Funcionamento</h3>
+                  <p class="text-gray-600">Segunda a Sexta: 07:00 - 20:00</p>
+                  <p class="text-gray-600">Sábado: 08:00 - 14:00</p>
+                </div>
+              </div>
+
+              <div class="flex items-start space-x-4">
+                <div class="w-12 h-12 bg-primary-1 rounded-full flex items-center justify-center flex-shrink-0">
+                  <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                  </svg>
+                </div>
+                <div>
+                  <h3 class="text-lg font-bold text-gray-800">Estacionamento</h3>
+                  <p class="text-gray-600">Gratuito para pacientes</p>
+                  <p class="text-gray-600">Vaga para pessoas com deficiência</p>
+                </div>
+              </div>
+            </div>
+
+            <a href="/como-chegar" class="btn-secondary text-lg px-8 py-4 w-full text-center block">
+              Ver Localização Completa
+            </a>
+          </div>
+
+          <!-- Google Maps -->
+          <div class="h-96 lg:h-full rounded-2xl overflow-hidden shadow-2xl" data-aos="fade-left">
+            <iframe 
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3657.1975576406812!2d-46.65378668502264!3d-23.56495988468041!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x94ce59c7f481fd9f%3A0x9982bfde4df54830!2sAv.%20Paulista%2C%20S%C3%A3o%20Paulo%20-%20SP%2C%20Brasil!5e0!3m2!1spt-BR!2sbr!4v1625177045930!5m2!1spt-BR!2sbr" 
+              width="100%" 
+              height="100%" 
+              style="border:0;" 
+              allowfullscreen="" 
+              loading="lazy"
+              class="w-full h-full"
+            ></iframe>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Agendamento -->
+    <section id="agendamento" class="section-padding bg-gradient-to-br from-primary-1 to-primary-2 text-white">
+      <div class="container">
+        <div class="text-center mb-16" data-aos="fade-up">
+          <h2 class="text-4xl font-bold mb-6">Agende Sua Avaliação Gratuita</h2>
+          <p class="text-xl opacity-90 max-w-2xl mx-auto">Dê o primeiro passo para sua recuperação. Nossa equipe entrará em contato em até 2 horas para confirmar seu agendamento.</p>
+        </div>
+
+        <div class="max-w-2xl mx-auto">
+          <form @submit.prevent="submitAgendamento" class="bg-white rounded-2xl p-8 shadow-2xl" data-aos="fade-up" data-aos-delay="200">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+              <div>
+                <label for="nome" class="block text-sm font-medium text-gray-700 mb-2">Nome Completo *</label>
+                <input 
+                  type="text" 
+                  id="nome" 
+                  v-model="agendamento.nome" 
+                  class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-1 focus:border-transparent transition-all duration-300" 
+                  placeholder="Seu nome completo"
+                  required
+                />
+              </div>
+              <div>
+                <label for="telefone" class="block text-sm font-medium text-gray-700 mb-2">Telefone/WhatsApp *</label>
+                <input 
+                  type="tel" 
+                  id="telefone" 
+                  v-model="agendamento.telefone" 
+                  class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-1 focus:border-transparent transition-all duration-300" 
+                  placeholder="(11) 99999-9999"
+                  required
+                />
+              </div>
+            </div>
+
+            <div class="mb-6">
+              <label for="email" class="block text-sm font-medium text-gray-700 mb-2">E-mail *</label>
+              <input 
+                type="email" 
+                id="email" 
+                v-model="agendamento.email" 
+                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-1 focus:border-transparent transition-all duration-300" 
+                placeholder="seu.email@exemplo.com"
+                required
+              />
+            </div>
+
+            <div class="mb-6">
+              <label for="servico" class="block text-sm font-medium text-gray-700 mb-2">Serviço de Interesse</label>
+              <select 
+                id="servico" 
+                v-model="agendamento.servico" 
+                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-1 focus:border-transparent transition-all duration-300"
+              >
+                <option value="">Selecione um serviço</option>
+                <option value="fisioterapia-ortopedica">Fisioterapia Ortopédica</option>
+                <option value="fisioterapia-neurologica">Fisioterapia Neurológica</option>
+                <option value="fisioterapia-esportiva">Fisioterapia Esportiva</option>
+                <option value="pilates-clinico">Pilates Clínico</option>
+                <option value="acupuntura">Acupuntura</option>
+                <option value="reabilitacao-vestibular">Reabilitação Vestibular</option>
+                <option value="avaliacao-geral">Avaliação Geral</option>
+              </select>
+            </div>
+
+            <div class="mb-6">
+              <label for="mensagem" class="block text-sm font-medium text-gray-700 mb-2">Conte-nos sobre sua situação</label>
+              <textarea 
+                id="mensagem" 
+                v-model="agendamento.mensagem" 
+                rows="4" 
+                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-1 focus:border-transparent transition-all duration-300" 
+                placeholder="Descreva brevemente sua condição, dor ou necessidade..."
+              ></textarea>
+            </div>
+
+            <div class="mb-6">
+              <label class="flex items-start space-x-3">
+                <input 
+                  type="checkbox" 
+                  v-model="agendamento.privacidade" 
+                  class="mt-1 w-4 h-4 text-primary-1 border-gray-300 rounded focus:ring-primary-1"
+                  required
+                />
+                <span class="text-sm text-gray-600 leading-relaxed">
+                  Concordo com a <a href="/politica-privacidade" class="text-primary-1 hover:underline">Política de Privacidade</a> e autorizo o contato via WhatsApp, telefone e e-mail para agendamento e acompanhamento.
+                </span>
+              </label>
+            </div>
+
+            <button 
+              type="submit" 
+              :disabled="loading"
+              class="w-full bg-gradient-to-r from-primary-1 to-primary-2 text-white font-bold py-4 px-8 rounded-lg hover:shadow-2xl transition-all duration-300 transform hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed"
+              onclick="gtag('event', 'form_submit', {'event_category': 'Agendamento', 'event_label': 'Formulário Principal'})"
+            >
+              <span v-if="!loading" class="flex items-center justify-center">
+                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                </svg>
+                Agendar Avaliação Gratuita
+              </span>
+              <span v-else class="flex items-center justify-center">
+                <svg class="animate-spin w-5 h-5 mr-2" fill="none" viewBox="0 0 24 24">
+                  <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                  <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+                Enviando...
+              </span>
+            </button>
+
+            <p class="text-center text-sm text-gray-500 mt-4">
+              ✅ Resposta em até 2 horas • 📞 Confirmação por WhatsApp • 🏥 Avaliação gratuita
+            </p>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <!-- Instagram Highlights -->
+    <section class="section-padding bg-white">
+      <div class="container">
+        <div class="text-center mb-16" data-aos="fade-up">
+          <h2 class="section-title text-gray-800">Acompanhe Nossa Rotina</h2>
+          <p class="section-subtitle text-gray-600 max-w-2xl mx-auto">Veja os bastidores da nossa clínica e histórias inspiradoras de nossos pacientes</p>
+        </div>
+
+        <!-- Instagram Feed -->
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8" data-aos="fade-up" data-aos-delay="200">
+          <div v-for="(post, index) in instagramPosts" :key="index" class="aspect-square rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:scale-105 cursor-pointer group">
+            <div class="relative w-full h-full">
+              <img :src="post.image" :alt="post.caption" class="w-full h-full object-cover">
+              <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-4">
+                <p class="text-white text-sm font-medium">{{ post.caption }}</p>
+              </div>
+              <div class="absolute top-4 right-4 bg-white rounded-full p-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                <svg class="w-4 h-4 text-primary-1" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M12.315 2c2.43 0 2.784.013 3.808.06 1.064.049 1.791.218 2.427.465a4.902 4.902 0 011.772 1.153 4.902 4.902 0 011.153 1.772c.247.636.416 1.363.465 2.427.048 1.067.06 1.407.06 4.123v.08c0 2.643-.012 2.987-.06 4.043-.049 1.064-.218 1.791-.465 2.427a4.902 4.902 0 01-1.153 1.772 4.902 4.902 0 01-1.772 1.153c-.636.247-1.363.416-2.427.465-1.067.048-1.407.06-4.123.06h-.08c-2.643 0-2.987-.012-4.043-.06-1.064-.049-1.791-.218-2.427-.465a4.902 4.902 0 01-1.772-1.153 4.902 4.902 0 01-1.153-1.772c-.247-.636-.416-1.363-.465-2.427-.047-1.024-.06-1.379-.06-3.808v-.63c0-2.43.013-2.784.06-3.808.049-1.064.218-1.791.465-2.427a4.902 4.902 0 011.153-1.772A4.902 4.902 0 015.45 2.525c.636-.247 1.363-.416 2.427-.465C8.901 2.013 9.256 2 11.685 2h.63zm-.081 1.802h-.468c-2.456 0-2.784.011-3.807.058-.975.045-1.504.207-1.857.344-.467.182-.8.398-1.15.748-.35.35-.566.683-.748 1.15-.137.353-.3.882-.344 1.857-.047 1.023-.058 1.351-.058 3.807v.468c0 2.456.011 2.784.058 3.807.045.975.207 1.504.344 1.857.182.466.399.8.748 1.15.35.35.683.566 1.15.748.353.137.882.3 1.857.344 1.054.048 1.37.058 4.041.058h.08c2.597 0 2.917-.01 3.96-.058.976-.045 1.505-.207 1.858-.344.466-.182.8-.398 1.15-.748.35-.35.566-.683.748-1.15.137-.353.3-.882.344-1.857.048-1.055.058-1.37.058-4.041v-.08c0-2.597-.01-2.917-.058-3.96-.045-.976-.207-1.505-.344-1.858a3.097 3.097 0 00-.748-1.15 3.098 3.098 0 00-1.15-.748c-.353-.137-.882-.3-1.857-.344-1.023-.047-1.351-.058-3.807-.058zM12 6.865a5.135 5.135 0 110 10.27 5.135 5.135 0 010-10.27zm0 1.802a3.333 3.333 0 100 6.666 3.333 3.333 0 000-6.666zm5.338-3.205a1.2 1.2 0 110 2.4 1.2 1.2 0 010-2.4z"></path>
+                </svg>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="text-center">
+          <a href="https://instagram.com/scclinica" target="_blank" class="btn-primary text-lg px-8 py-4 inline-flex items-center">
+            <svg class="w-5 h-5 mr-3" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M12.315 2c2.43 0 2.784.013 3.808.06 1.064.049 1.791.218 2.427.465a4.902 4.902 0 011.772 1.153 4.902 4.902 0 011.153 1.772c.247.636.416 1.363.465 2.427.048 1.067.06 1.407.06 4.123v.08c0 2.643-.012 2.987-.06 4.043-.049 1.064-.218 1.791-.465 2.427a4.902 4.902 0 01-1.153 1.772 4.902 4.902 0 01-1.772 1.153c-.636.247-1.363.416-2.427.465-1.067.048-1.407.06-4.123.06h-.08c-2.643 0-2.987-.012-4.043-.06-1.064-.049-1.791-.218-2.427-.465a4.902 4.902 0 01-1.772-1.153 4.902 4.902 0 01-1.153-1.772c-.247-.636-.416-1.363-.465-2.427-.047-1.024-.06-1.379-.06-3.808v-.63c0-2.43.013-2.784.06-3.808.049-1.064.218-1.791.465-2.427a4.902 4.902 0 011.153-1.772A4.902 4.902 0 015.45 2.525c.636-.247 1.363-.416 2.427-.465C8.901 2.013 9.256 2 11.685 2h.63zm-.081 1.802h-.468c-2.456 0-2.784.011-3.807.058-.975.045-1.504.207-1.857.344-.467.182-.8.398-1.15.748-.35.35-.566.683-.748 1.15-.137.353-.3.882-.344 1.857-.047 1.023-.058 1.351-.058 3.807v.468c0 2.456.011 2.784.058 3.807.045.975.207 1.504.344 1.857.182.466.399.8.748 1.15.35.35.683.566 1.15.748.353.137.882.3 1.857.344 1.054.048 1.37.058 4.041.058h.08c2.597 0 2.917-.01 3.96-.058.976-.045 1.505-.207 1.858-.344.466-.182.8-.398 1.15-.748.35-.35.566-.683.748-1.15.137-.353.3-.882.344-1.857.048-1.055.058-1.37.058-4.041v-.08c0-2.597-.01-2.917-.058-3.96-.045-.976-.207-1.505-.344-1.858a3.097 3.097 0 00-.748-1.15 3.098 3.098 0 00-1.15-.748c-.353-.137-.882-.3-1.857-.344-1.023-.047-1.351-.058-3.807-.058zM12 6.865a5.135 5.135 0 110 10.27 5.135 5.135 0 010-10.27zm0 1.802a3.333 3.333 0 100 6.666 3.333 3.333 0 000-6.666zm5.338-3.205a1.2 1.2 0 110 2.4 1.2 1.2 0 010-2.4z"></path>
+            </svg>
+            Seguir no Instagram
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Contato -->
+    <section id="contact" class="section-padding bg-gradient-to-br from-primary-2/10 to-secondary/20">
+      <div class="container">
+        <div class="text-center mb-16" data-aos="fade-up">
+          <h2 class="section-title">Informações de Contato</h2>
+          <p class="section-subtitle">Estamos sempre disponíveis para atender você</p>
         </div>
 
         <div class="grid grid-cols-1 gap-10 lg:grid-cols-2">
@@ -542,22 +1162,61 @@
         </div>
       </div>
     </footer>
+
+    <!-- Floating Buttons -->
+    <!-- WhatsApp Button -->
+    <a 
+      href="https://wa.me/5511987654321?text=Olá! Gostaria de agendar uma avaliação gratuita na SC Clínica." 
+      target="_blank"
+      class="floating-btn bottom-6 right-6 w-16 h-16 bg-green-500 hover:bg-green-600 text-white rounded-full shadow-2xl flex items-center justify-center animate-float"
+      onclick="gtag('event', 'click', {'event_category': 'WhatsApp', 'event_label': 'Floating Button'})"
+    >
+      <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24">
+        <path d="M17.498 14.382c-.301-.15-1.767-.867-2.04-.966-.273-.101-.473-.15-.673.15-.197.295-.771.964-.944 1.162-.175.195-.349.21-.646.075-.3-.15-1.263-.465-2.403-1.485-.888-.795-1.484-1.77-1.66-2.07-.174-.3-.019-.465.13-.615.136-.135.301-.345.451-.523.146-.181.194-.301.297-.496.1-.21.049-.375-.025-.524-.075-.15-.672-1.62-.922-2.206-.24-.584-.487-.51-.672-.51-.172-.015-.371-.015-.571-.015-.2 0-.523.074-.797.359-.273.3-1.045 1.02-1.045 2.475s1.07 2.865 1.219 3.075c.149.195 2.105 3.195 5.1 4.485.714.3 1.27.48 1.704.629.714.227 1.365.195 1.88.121.574-.091 1.767-.721 2.016-1.426.255-.705.255-1.29.18-1.425-.074-.135-.27-.21-.57-.345z"/>
+        <path d="M20.52 3.449a12.871 12.871 0 00-9.073-3.769c-7.173 0-13.007 5.834-13.007 13.008 0 2.293.598 4.533 1.734 6.518l-1.841 6.704 6.833-1.793a13.13 13.13 0 006.259 1.588h.004c7.173 0 13.007-5.833 13.007-13.007 0-3.484-1.343-6.756-3.787-9.211zm-9.075 19.894h-.003a10.93 10.93 0 01-5.553-1.52l-.399-.238-4.124 1.081 1.099-4.004-.262-.416a10.79 10.79 0 01-1.67-5.778c0-5.974 4.862-10.834 10.841-10.834 2.888 0 5.607 1.125 7.648 3.168a10.673 10.673 0 013.179 7.665c.002 5.974-4.856 10.834-10.833 10.834z"/>
+      </svg>
+    </a>
+
+    <!-- Instagram Button -->
+    <a 
+      href="https://instagram.com/scclinica" 
+      target="_blank"
+      class="floating-btn bottom-24 right-6 w-14 h-14 bg-gradient-to-br from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white rounded-full shadow-2xl flex items-center justify-center"
+      onclick="gtag('event', 'click', {'event_category': 'Instagram', 'event_label': 'Floating Button'})"
+    >
+      <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+        <path d="M12.315 2c2.43 0 2.784.013 3.808.06 1.064.049 1.791.218 2.427.465a4.902 4.902 0 011.772 1.153 4.902 4.902 0 011.153 1.772c.247.636.416 1.363.465 2.427.048 1.067.06 1.407.06 4.123v.08c0 2.643-.012 2.987-.06 4.043-.049 1.064-.218 1.791-.465 2.427a4.902 4.902 0 01-1.153 1.772 4.902 4.902 0 01-1.772 1.153c-.636.247-1.363.416-2.427.465-1.067.048-1.407.06-4.123.06h-.08c-2.643 0-2.987-.012-4.043-.06-1.064-.049-1.791-.218-2.427-.465a4.902 4.902 0 01-1.772-1.153 4.902 4.902 0 01-1.153-1.772c-.247-.636-.416-1.363-.465-2.427-.047-1.024-.06-1.379-.06-3.808v-.63c0-2.43.013-2.784.06-3.808.049-1.064.218-1.791.465-2.427a4.902 4.902 0 011.153-1.772A4.902 4.902 0 715.45 2.525c.636-.247 1.363-.416 2.427-.465C8.901 2.013 9.256 2 11.685 2h.63zm-.081 1.802h-.468c-2.456 0-2.784.011-3.807.058-.975.045-1.504.207-1.857.344-.467.182-.8.398-1.15.748-.35.35-.566.683-.748 1.15-.137.353-.3.882-.344 1.857-.047 1.023-.058 1.351-.058 3.807v.468c0 2.456.011 2.784.058 3.807.045.975.207 1.504.344 1.857.182.466.399.8.748 1.15.35.35.683.566 1.15.748.353.137.882.3 1.857.344 1.054.048 1.37.058 4.041.058h.08c2.597 0 2.917-.01 3.96-.058.976-.045 1.505-.207 1.858-.344.466-.182.8-.398 1.15-.748.35-.35.566-.683.748-1.15.137-.353.3-.882.344-1.857.048-1.055.058-1.37.058-4.041v-.08c0-2.597-.01-2.917-.058-3.96-.045-.976-.207-1.505-.344-1.858a3.097 3.097 0 00-.748-1.15 3.098 3.098 0 00-1.15-.748c-.353-.137-.882-.3-1.857-.344-1.023-.047-1.351-.058-3.807-.058zM12 6.865a5.135 5.135 0 110 10.27 5.135 5.135 0 010-10.27zm0 1.802a3.333 3.333 0 100 6.666 3.333 3.333 0 000-6.666zm5.338-3.205a1.2 1.2 0 110 2.4 1.2 1.2 0 010-2.4z"/>
+      </svg>
+    </a>
   </div>
+
+  <!-- Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=GA_MEASUREMENT_ID"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'GA_MEASUREMENT_ID');
+  </script>
 
   <script>
     document.addEventListener('DOMContentLoaded', function() {
       AOS.init({
         duration: 800,
         easing: 'ease-in-out',
-        once: true
+        once: true,
+        offset: 100
       });
     });
 
-    const { createApp, ref } = Vue;
+    const { createApp, ref, onMounted, onUnmounted } = Vue;
     
     createApp({
       setup() {
         const mobileMenuOpen = ref(false);
+        const loading = ref(false);
+        
+        // Form data
         const form = ref({
           name: '',
           email: '',
@@ -565,14 +1224,201 @@
           message: ''
         });
 
+        const agendamento = ref({
+          nome: '',
+          telefone: '',
+          email: '',
+          servico: '',
+          mensagem: '',
+          privacidade: false
+        });
+
+        // Navigation
         const navItems = ref([
           { label: 'Início', href: '#home' },
           { label: 'Serviços', href: '#services' },
           { label: 'Sobre Nós', href: '#about' },
+          { label: 'Equipe', href: '#team' },
+          { label: 'Depoimentos', href: '#testimonials' },
           { label: 'Contato', href: '#contact' }
         ]);
 
+        // Services carousel
+        const currentSlide = ref(0);
+        const slideWidth = ref(100);
+        const slidesPerView = ref(1);
+        
+        const servicos = ref([
+          {
+            nome: 'Fisioterapia Ortopédica',
+            slug: 'fisioterapia-ortopedica',
+            descricao: 'Tratamento especializado para lesões musculoesqueléticas, dores articulares e recuperação pós-cirúrgica.',
+            icon: '<svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg>',
+            tags: ['Dor nas costas', 'Pós-operatório', 'Articulações']
+          },
+          {
+            nome: 'Fisioterapia Neurológica',
+            slug: 'fisioterapia-neurologica',
+            descricao: 'Reabilitação para pacientes com lesões neurológicas, focando em funcionalidade e equilíbrio.',
+            icon: '<svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path></svg>',
+            tags: ['AVC', 'Parkinson', 'Equilíbrio']
+          },
+          {
+            nome: 'Fisioterapia Esportiva',
+            slug: 'fisioterapia-esportiva',
+            descricao: 'Prevenção e tratamento de lesões esportivas com programas específicos de retorno às atividades.',
+            icon: '<svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>',
+            tags: ['Lesões', 'Recuperação', 'Performance']
+          },
+          {
+            nome: 'Pilates Clínico',
+            slug: 'pilates-clinico',
+            descricao: 'Método terapêutico que combina fortalecimento, alongamento e consciência corporal.',
+            icon: '<svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg>',
+            tags: ['Fortalecimento', 'Postura', 'Flexibilidade']
+          },
+          {
+            nome: 'Acupuntura',
+            slug: 'acupuntura',
+            descricao: 'Técnica milenar para alívio da dor, equilíbrio energético e tratamento de diversas condições.',
+            icon: '<svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg>',
+            tags: ['Dor crônica', 'Estresse', 'Bem-estar']
+          },
+          {
+            nome: 'Reabilitação Vestibular',
+            slug: 'reabilitacao-vestibular',
+            descricao: 'Tratamento especializado para distúrbios do equilíbrio, tontura e vertigem.',
+            icon: '<svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path></svg>',
+            tags: ['Vertigem', 'Tontura', 'Equilíbrio']
+          }
+        ]);
+
+        // Testimonials
+        const currentTestimonialSlide = ref(0);
+        const depoimentos = ref([
+          {
+            tipo: 'texto',
+            nome: 'Maria Silva',
+            foto: 'https://images.unsplash.com/photo-1494790108755-2616b612b29c?ixlib=rb-4.0.3&auto=format&fit=crop&w=256&q=80',
+            tratamento: 'Fisioterapia Ortopédica',
+            texto: 'Após meses sofrendo com dores nas costas, encontrei a SC Clínica. Os profissionais são extremamente competentes e o tratamento foi muito eficaz. Hoje estou completamente recuperada!'
+          },
+          {
+            tipo: 'video',
+            nome: 'João Santos',
+            tratamento: 'Fisioterapia Esportiva',
+            videoUrl: 'https://sample-videos.com/zip/10/mp4/SampleVideo_1280x720_1mb.mp4',
+            videoPoster: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+            resumo: 'Recuperação completa após lesão no joelho'
+          },
+          {
+            tipo: 'texto',
+            nome: 'Ana Costa',
+            foto: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-4.0.3&auto=format&fit=crop&w=256&q=80',
+            tratamento: 'Pilates Clínico',
+            texto: 'O Pilates Clínico da SC Clínica transformou minha postura e qualidade de vida. As dores crônicas na coluna diminuíram significativamente após alguns meses de tratamento.'
+          }
+        ]);
+
+        // Team
+        const currentTeamSlide = ref(0);
+        const teamSlideWidth = ref(100);
+        const equipe = ref([
+          {
+            nome: 'Dra. Ana Silva',
+            cargo: 'Fisioterapeuta Ortopédica',
+            foto: 'https://images.unsplash.com/photo-1559839734-2b71ea197ec2?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80',
+            bio: 'Especialista em tratamento de lesões esportivas e reabilitação pós-cirúrgica com mais de 8 anos de experiência.',
+            especializacao: 'Ortopedia e Traumatologia',
+            qualificacoes: ['CREFITO', 'Pós-graduação', 'RPG'],
+            linkedin: '#',
+            instagram: '#'
+          },
+          {
+            nome: 'Dr. Carlos Oliveira',
+            cargo: 'Fisioterapeuta Neurológico',
+            foto: 'https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80',
+            bio: 'Especialista em reabilitação neurológica com mestrado em neurociência aplicada.',
+            especializacao: 'Neurologia',
+            qualificacoes: ['CREFITO', 'Mestrado', 'Bobath'],
+            linkedin: '#',
+            instagram: '#'
+          },
+          {
+            nome: 'Dra. Mariana Santos',
+            cargo: 'Especialista em Pilates',
+            foto: 'https://images.unsplash.com/photo-1594824780851-afef48d9c0a3?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80',
+            bio: 'Especialista em Pilates terapêutico com formação avançada em biomecânica do movimento.',
+            especializacao: 'Pilates Clínico',
+            qualificacoes: ['CREFITO', 'Pilates', 'Biomecânica'],
+            linkedin: '#',
+            instagram: '#'
+          }
+        ]);
+
+        // Instagram posts
+        const instagramPosts = ref([
+          {
+            image: 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80',
+            caption: 'Exercícios de reabilitação'
+          },
+          {
+            image: 'https://images.unsplash.com/photo-1576091160399-112ba8d25d1f?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80',
+            caption: 'Nossa moderna infraestrutura'
+          },
+          {
+            image: 'https://images.unsplash.com/photo-1559757175-0eb30cd8c063?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80',
+            caption: 'Atendimento personalizado'
+          },
+          {
+            image: 'https://images.unsplash.com/photo-1582750433449-648ed127bb54?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80',
+            caption: 'Equipe especializada'
+          }
+        ]);
+
+        // Auto-play carousels
+        let servicesInterval;
+        let testimonialsInterval;
+
+        // Methods
+        const nextSlide = () => {
+          const maxSlides = Math.ceil(servicos.value.length / slidesPerView.value);
+          currentSlide.value = (currentSlide.value + 1) % maxSlides;
+        };
+
+        const prevSlide = () => {
+          const maxSlides = Math.ceil(servicos.value.length / slidesPerView.value);
+          currentSlide.value = currentSlide.value === 0 ? maxSlides - 1 : currentSlide.value - 1;
+        };
+
+        const goToSlide = (index) => {
+          currentSlide.value = index;
+        };
+
+        const nextTestimonial = () => {
+          currentTestimonialSlide.value = (currentTestimonialSlide.value + 1) % depoimentos.value.length;
+        };
+
+        const prevTestimonial = () => {
+          currentTestimonialSlide.value = currentTestimonialSlide.value === 0 ? depoimentos.value.length - 1 : currentTestimonialSlide.value - 1;
+        };
+
+        const goToTestimonial = (index) => {
+          currentTestimonialSlide.value = index;
+        };
+
+        const nextTeamMember = () => {
+          const maxSlides = Math.ceil(equipe.value.length / slidesPerView.value);
+          currentTeamSlide.value = (currentTeamSlide.value + 1) % maxSlides;
+        };
+
+        const prevTeamMember = () => {
+          const maxSlides = Math.ceil(equipe.value.length / slidesPerView.value);
+          currentTeamSlide.value = currentTeamSlide.value === 0 ? maxSlides - 1 : currentTeamSlide.value - 1;
+        };
+
         const submitForm = () => {
+          gtag('event', 'form_submit', {'event_category': 'Contact', 'event_label': 'Contact Form'});
           alert('Obrigado! Sua mensagem foi enviada com sucesso. Entraremos em contato em breve.');
           form.value = {
             name: '',
@@ -582,11 +1428,103 @@
           };
         };
 
+        const submitAgendamento = async () => {
+          loading.value = true;
+          
+          try {
+            // Simulate form submission
+            await new Promise(resolve => setTimeout(resolve, 2000));
+            
+            gtag('event', 'form_submit', {'event_category': 'Agendamento', 'event_label': 'Formulário Principal'});
+            
+            // Create WhatsApp message
+            const message = `Olá! Gostaria de agendar uma avaliação gratuita.
+            
+Nome: ${agendamento.value.nome}
+Telefone: ${agendamento.value.telefone}
+Email: ${agendamento.value.email}
+Serviço: ${agendamento.value.servico}
+Mensagem: ${agendamento.value.mensagem}`;
+            
+            const whatsappUrl = `https://wa.me/5511987654321?text=${encodeURIComponent(message)}`;
+            window.open(whatsappUrl, '_blank');
+            
+            alert('Formulário enviado com sucesso! Você será redirecionado para o WhatsApp para confirmar seu agendamento.');
+            
+            agendamento.value = {
+              nome: '',
+              telefone: '',
+              email: '',
+              servico: '',
+              mensagem: '',
+              privacidade: false
+            };
+          } catch (error) {
+            alert('Erro ao enviar formulário. Tente novamente ou entre em contato via WhatsApp.');
+          } finally {
+            loading.value = false;
+          }
+        };
+
+        const updateSlideView = () => {
+          const width = window.innerWidth;
+          if (width >= 1024) {
+            slidesPerView.value = 3;
+            slideWidth.value = 33.333;
+            teamSlideWidth.value = 33.333;
+          } else if (width >= 768) {
+            slidesPerView.value = 2;
+            slideWidth.value = 50;
+            teamSlideWidth.value = 50;
+          } else {
+            slidesPerView.value = 1;
+            slideWidth.value = 100;
+            teamSlideWidth.value = 100;
+          }
+        };
+
+        onMounted(() => {
+          updateSlideView();
+          window.addEventListener('resize', updateSlideView);
+          
+          // Auto-play carousels
+          servicesInterval = setInterval(nextSlide, 5000);
+          testimonialsInterval = setInterval(nextTestimonial, 7000);
+        });
+
+        onUnmounted(() => {
+          window.removeEventListener('resize', updateSlideView);
+          if (servicesInterval) clearInterval(servicesInterval);
+          if (testimonialsInterval) clearInterval(testimonialsInterval);
+        });
+
         return {
           mobileMenuOpen,
           form,
+          agendamento,
+          loading,
           navItems,
-          submitForm
+          servicos,
+          currentSlide,
+          slideWidth,
+          slidesPerView,
+          depoimentos,
+          currentTestimonialSlide,
+          equipe,
+          currentTeamSlide,
+          teamSlideWidth,
+          instagramPosts,
+          nextSlide,
+          prevSlide,
+          goToSlide,
+          nextTestimonial,
+          prevTestimonial,
+          goToTestimonial,
+          nextTeamMember,
+          prevTeamMember,
+          submitForm,
+          submitAgendamento,
+          updateSlideView
         };
       }
     }).mount('#app');
